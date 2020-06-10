@@ -1,7 +1,7 @@
 ARG fedora_release=31
 FROM docker.io/fedora:${fedora_release} AS builder
 ARG rdkit_git_url=https://github.com/rdkit/rdkit.git
-ARG rdkit_git_ref=Release_2020_03_2
+ARG rdkit_git_ref=Release_2020_03_3
 
 RUN dnf install -y \
     boost-devel \
@@ -24,6 +24,7 @@ RUN git checkout ${rdkit_git_ref}
 
 RUN cmake \
     -D CATCH_DIR=/usr/include/catch2 \
+    -D RDK_BUILD_COMPRESSED_SUPPLIERS=ON \
     -D RDK_BUILD_CAIRO_SUPPORT=ON \
     -D RDK_BUILD_INCHI_SUPPORT=ON \
     -D RDK_BUILD_AVALON_SUPPORT=ON \
@@ -32,7 +33,6 @@ RUN cmake \
     -D RDK_BUILD_COORDGEN_SUPPORT=ON \
     -D RDK_BUILD_MOLINTERCHANGE_SUPPORT=ON \
     -D RDK_BUILD_YAEHMOP_SUPPORT=ON \
-    -D RDK_BUILD_STRUCTCHECKER_SUPPORT=ON \
     -D RDK_USE_URF=ON \
     -D RDK_BUILD_PGSQL=OFF \
     -D RDK_BUILD_PYTHON_WRAPPERS=OFF \
