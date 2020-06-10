@@ -24,7 +24,6 @@ RUN git checkout ${rdkit_git_ref}
 
 RUN cmake \
     -D CATCH_DIR=/usr/include/catch2 \
-    -D RDK_BUILD_COMPRESSED_SUPPLIERS=ON \
     -D RDK_BUILD_CAIRO_SUPPORT=ON \
     -D RDK_BUILD_INCHI_SUPPORT=ON \
     -D RDK_BUILD_AVALON_SUPPORT=ON \
