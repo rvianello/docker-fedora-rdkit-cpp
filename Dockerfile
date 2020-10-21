@@ -1,7 +1,7 @@
-ARG fedora_release=31
+ARG fedora_release=32
 FROM docker.io/fedora:${fedora_release} AS builder
 ARG rdkit_git_url=https://github.com/rdkit/rdkit.git
-ARG rdkit_git_ref=Release_2020_03_3
+ARG rdkit_git_ref=Release_2020_09_1
 
 RUN dnf install -y \
     boost-devel \
@@ -46,7 +46,7 @@ RUN make -j4
 RUN RDBASE="$PWD" LD_LIBRARY_PATH="$PWD/lib" ctest -j4 --output-on-failure
 RUN make install DESTDIR=/opt/RDKit-build/stage
 
-ARG fedora_release=31
+ARG fedora_release=32
 FROM docker.io/fedora:${fedora_release}
 
 RUN dnf install -y \
