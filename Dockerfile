@@ -1,7 +1,7 @@
-ARG fedora_release=32
+ARG fedora_release=33
 FROM docker.io/fedora:${fedora_release} AS builder
 ARG rdkit_git_url=https://github.com/rdkit/rdkit.git
-ARG rdkit_git_ref=Release_2020_09_1
+ARG rdkit_git_ref=Release_2020_09_2
 
 RUN dnf install -y \
     boost-devel \
@@ -12,7 +12,9 @@ RUN dnf install -y \
     g++ \
     git \
     make \
-    zlib-devel
+    zlib-devel \
+  && dnf clean all
+
 
 WORKDIR /opt/RDKit-build
 
@@ -46,7 +48,7 @@ RUN make -j4
 RUN RDBASE="$PWD" LD_LIBRARY_PATH="$PWD/lib" ctest -j4 --output-on-failure
 RUN make install DESTDIR=/opt/RDKit-build/stage
 
-ARG fedora_release=32
+ARG fedora_release=33
 FROM docker.io/fedora:${fedora_release}
 
 RUN dnf install -y \
@@ -55,7 +57,8 @@ RUN dnf install -y \
     boost-serialization \
     boost-system \
     cairo \
-    zlib
+    zlib \
+  && dnf clean all
 
 COPY --from=builder /opt/RDKit-build/stage/usr /usr
 
