@@ -1,7 +1,7 @@
-ARG fedora_release=35
+ARG fedora_release=36
 FROM docker.io/fedora:${fedora_release} AS builder
 ARG rdkit_git_url=https://github.com/rdkit/rdkit.git
-ARG rdkit_git_ref=Release_2022_03_2
+ARG rdkit_git_ref=Release_2022_03_5
 
 RUN dnf update -y \
   && dnf install -y \
@@ -49,7 +49,7 @@ RUN make -j4
 RUN RDBASE="$PWD" LD_LIBRARY_PATH="$PWD/lib" ctest -j4 --output-on-failure
 RUN make install DESTDIR=/opt/RDKit-build/stage
 
-ARG fedora_release=35
+ARG fedora_release=36
 FROM docker.io/fedora:${fedora_release}
 
 RUN dnf update -y \
