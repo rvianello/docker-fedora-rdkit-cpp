@@ -1,13 +1,13 @@
-ARG fedora_release=36
+ARG fedora_release=38
 FROM docker.io/fedora:${fedora_release} AS builder
 ARG rdkit_git_url=https://github.com/rdkit/rdkit.git
-ARG rdkit_git_ref=Release_2022_03_5
+ARG rdkit_git_ref=Release_2023_03_1
 
 RUN dnf update -y \
   && dnf install -y \
     boost-devel \
     cairo-devel \
-    catch-devel \
+    catch2-devel \
     cmake \
     eigen3-devel \
     g++ \
@@ -24,6 +24,8 @@ RUN git clone ${rdkit_git_url}
 WORKDIR /opt/RDKit-build/rdkit
 
 RUN git checkout ${rdkit_git_ref}
+# backport #6338
+RUN git cherry-pick -n f4e929a
 
 RUN cmake \
     -D CATCH_DIR=/usr/include/catch2 \
